@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -60,7 +61,11 @@ public class SocialNetworkFragment extends Fragment {
         // Установим адаптер
         adapter = new SocialNetworkAdapter(data,this);
         recyclerView.setAdapter(adapter);
-
+        DefaultItemAnimator defaultItemAnimator = new DefaultItemAnimator();
+        defaultItemAnimator.setAddDuration(2000);
+        defaultItemAnimator.setChangeDuration(2000);
+        defaultItemAnimator.setRemoveDuration(2000);
+        recyclerView.setItemAnimator(defaultItemAnimator);
 
 
         // Добавим разделитель карточек
