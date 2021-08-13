@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
+import android.view.Menu;
 
 import ru.geekbrains.socialnetwork.ui.SocialNetworkFragment;
 
@@ -18,6 +19,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         initToolbar();
         addFragment(SocialNetworkFragment.newInstance());
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_menu,menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     private void initToolbar() {
@@ -35,4 +42,5 @@ public class MainActivity extends AppCompatActivity {
         // Закрыть транзакцию
         fragmentTransaction.commit();
     }
+
 }
