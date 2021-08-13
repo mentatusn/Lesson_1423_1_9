@@ -1,6 +1,10 @@
 package ru.geekbrains.socialnetwork.data;
 
 public class CardData {
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     private String title;       // заголовок
     private String description; // описание
     private int picture;        // изображение
@@ -16,6 +20,7 @@ public class CardData {
     public String getTitle() {
         return title;
     }
+
 
     public String getDescription() {
         return description;

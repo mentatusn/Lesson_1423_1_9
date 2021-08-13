@@ -9,7 +9,10 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.Date;
 
 import ru.geekbrains.socialnetwork.R;
 import ru.geekbrains.socialnetwork.data.CardData;
@@ -22,10 +25,18 @@ public class SocialNetworkAdapter
     private CardsSource dataSource;
     private OnItemClickListener itemClickListener;  // Слушатель будет устанавливаться извне
 
+    private Fragment fragment;
+    private int menuContextClickPosition;
+
+    public int getMenuContextClickPosition() {
+        return menuContextClickPosition;
+    }
+
     // Передаем в конструктор источник данных
     // В нашем случае это массив, но может быть и запросом к БД
-    public SocialNetworkAdapter(CardsSource dataSource) {
+    public SocialNetworkAdapter(CardsSource dataSource, Fragment fragment) {
         this.dataSource = dataSource;
+        this.fragment = fragment;
     }
 
     // Создать новый элемент пользовательского интерфейса
@@ -84,7 +95,7 @@ public class SocialNetworkAdapter
             description = itemView.findViewById(R.id.description);
             image = itemView.findViewById(R.id.imageView);
             like = itemView.findViewById(R.id.like);
-
+            fragment.registerForContextMenu(image);
             // Обработчик нажатий на картинке
             image.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -92,6 +103,14 @@ public class SocialNetworkAdapter
                     if (itemClickListener != null) {
                         itemClickListener.onItemClick(v, getAdapterPosition());
                     }
+                }
+            });
+            image.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    menuContextClickPosition = getAdapterPosition();
+                    image.showContextMenu(0,0); // FIXME
+                    return true;
                 }
             });
         }

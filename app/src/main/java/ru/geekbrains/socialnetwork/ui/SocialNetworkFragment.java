@@ -3,11 +3,14 @@ package ru.geekbrains.socialnetwork.ui;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -55,8 +58,10 @@ public class SocialNetworkFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
 
         // Установим адаптер
-        adapter = new SocialNetworkAdapter(data);
+        adapter = new SocialNetworkAdapter(data,this);
         recyclerView.setAdapter(adapter);
+
+
 
         // Добавим разделитель карточек
         DividerItemDecoration itemDecoration = new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL);
@@ -95,5 +100,27 @@ public class SocialNetworkFragment extends Fragment {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        requireActivity().getMenuInflater().inflate(R.menu.card_menu,menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        int position = adapter.getMenuContextClickPosition();
+        switch (item.getItemId()) {
+            case R.id.action_update:
+                data.getCardData(position).setTitle("ОБНОВИЛИ "+position);
+                adapter.notifyItemChanged(position); // FIXME MAP
+                return true;
+            case R.id.action_delete:
+                data.deleteCardData(position);
+                adapter.notifyItemRemoved(position);
+                return true;
+        }
+        return super.onContextItemSelected(item);
     }
 }
