@@ -1,5 +1,6 @@
 package ru.geekbrains.socialnetwork.ui;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -21,10 +22,16 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Calendar;
+
+import ru.geekbrains.socialnetwork.MainActivity;
+import ru.geekbrains.socialnetwork.Navigation;
 import ru.geekbrains.socialnetwork.R;
 import ru.geekbrains.socialnetwork.data.CardData;
 import ru.geekbrains.socialnetwork.data.CardsSource;
 import ru.geekbrains.socialnetwork.data.CardsSourceImpl;
+import ru.geekbrains.socialnetwork.observe.Observer;
+import ru.geekbrains.socialnetwork.observe.Publisher;
 
 public class SocialNetworkFragment extends Fragment {
 
@@ -32,8 +39,33 @@ public class SocialNetworkFragment extends Fragment {
     private SocialNetworkAdapter adapter;
     private RecyclerView recyclerView;
 
+    private Navigation navigation;
+    private Publisher publisher;
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        MainActivity activity = (MainActivity)context;
+        navigation = activity.getNavigation();
+        publisher = activity.getPublisher();
+    }
+    @Override
+    public void onDetach() {
+        navigation = null;
+        publisher = null;
+        super.onDetach();
+    }
+
+
     public static SocialNetworkFragment newInstance() {
         return new SocialNetworkFragment();
+    }
+
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        data = new CardsSourceImpl(getResources()).init();
     }
 
     @Override
@@ -44,7 +76,6 @@ public class SocialNetworkFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_socialnetwork, container, false);
         recyclerView = view.findViewById(R.id.recycler_view_lines);
         // Получим источник данных для списка
-        data = new CardsSourceImpl(getResources()).init();
         initRecyclerView(recyclerView, data);
         return view;
     }
@@ -92,12 +123,16 @@ public class SocialNetworkFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add:
-                data.addCardData(new CardData("НОВАЯ " + data.size(),
-                        "ОПИСАНИЕ " + data.size(),
-                        R.drawable.nature1, false));
-                adapter.notifyItemInserted(data.size()-1); // FIXME
-                //recyclerView.scrollToPosition(data.size()-1);
-                recyclerView.smoothScrollToPosition(data.size()-1);
+                navigation.addFragment(CardUpdateFragment.newInstance(), true);
+                publisher.subscribe(new Observer() {
+                    @Override
+                    public void updateState(CardData cardData) {
+                        Log.d("mylogs","updateState1 "+data.size());
+                        data.addCardData(cardData);
+                        Log.d("mylogs","updateState2 "+data.size());
+                        adapter.notifyItemInserted(data.size() - 1);
+                    }
+                });
                 return true;
             case R.id.action_clear:
                 data.clearCardData();
@@ -118,8 +153,18 @@ public class SocialNetworkFragment extends Fragment {
         int position = adapter.getMenuContextClickPosition();
         switch (item.getItemId()) {
             case R.id.action_update:
-                data.getCardData(position).setTitle("ОБНОВИЛИ "+position);
-                adapter.notifyItemChanged(position); // FIXME MAP
+               /* data.getCardData(position).setTitle("ОБНОВИЛИ "+position);
+                adapter.notifyItemChanged(position); // FIXME MAP*/
+
+                navigation.addFragment(CardUpdateFragment.newInstance(data.getCardData(position)), true);
+                publisher.subscribe(new Observer() {
+                    @Override
+                    public void updateState(CardData cardData) {
+                        Log.d("mylogs","updateState1 "+data.size());
+                        data.updateCardData(position,cardData);
+                        adapter.notifyItemChanged(position);
+                    }
+                });
                 return true;
             case R.id.action_delete:
                 data.deleteCardData(position);

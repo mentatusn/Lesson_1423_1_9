@@ -88,6 +88,7 @@ public class SocialNetworkAdapter
         private TextView description;
         private AppCompatImageView image;
         private CheckBox like;
+        private TextView date;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -95,6 +96,8 @@ public class SocialNetworkAdapter
             description = itemView.findViewById(R.id.description);
             image = itemView.findViewById(R.id.imageView);
             like = itemView.findViewById(R.id.like);
+            date = itemView.findViewById(R.id.date);
+
             fragment.registerForContextMenu(image);
             // Обработчик нажатий на картинке
             image.setOnClickListener(new View.OnClickListener() {
@@ -117,6 +120,7 @@ public class SocialNetworkAdapter
 
         public void setData(CardData cardData){
             title.setText(cardData.getTitle());
+            date.setText(cardData.getDate().toString());
             description.setText(cardData.getDescription());
             like.setChecked(cardData.isLike());
             image.setImageResource(cardData.getPicture());
