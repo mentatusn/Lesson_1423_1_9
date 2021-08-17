@@ -10,6 +10,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.Source;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +24,7 @@ public class CardsSourceRemoteImpl implements CardsSource {
 
     @Override
     public CardsSource init(CardsSourceResponse cardsSourceResponse) {
-        collectionReference.orderBy(CardDataTranslate.Fields.DATE, Query.Direction.DESCENDING).get()
+        collectionReference.orderBy(CardDataTranslate.Fields.DATE, Query.Direction.DESCENDING).get(Source.SERVER)
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -65,7 +66,7 @@ public class CardsSourceRemoteImpl implements CardsSource {
     @Override
     public void updateCardData(int position, CardData newCardData) {
         collectionReference.document(cardsData.get(position).getId())
-                .update(CardDataTranslate.cardDataToDocument(newCardData)); // FIXME SET
+                .update(CardDataTranslate.cardDataToDocument(newCardData));
     }
 
     @Override
@@ -75,8 +76,7 @@ public class CardsSourceRemoteImpl implements CardsSource {
 
     @Override
     public void clearCardData() {
-        for (CardData cardData:
-             cardsData) { // FIXME найти более оптимальниы способ
+        for (CardData cardData: cardsData) { // FIXME найти более оптимальниы способ
             collectionReference.document(cardData.getId()).delete();
         }
     }

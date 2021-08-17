@@ -162,7 +162,7 @@ public class SocialNetworkFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.action_update:
                /* data.getCardData(position).setTitle("ОБНОВИЛИ "+position);
-                adapter.notifyItemChanged(position); // FIXME MAP*/
+                adapter.notifyItemChanged(position); */
 
                 navigation.addFragment(CardUpdateFragment.newInstance(data.getCardData(position)), true);
                 publisher.subscribe(new Observer() {

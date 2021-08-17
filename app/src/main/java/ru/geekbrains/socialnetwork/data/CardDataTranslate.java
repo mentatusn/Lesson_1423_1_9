@@ -19,9 +19,9 @@ public class CardDataTranslate {
         CardData answer = new CardData(
                 (String) doc.get(Fields.TITLE),
                 (String) doc.get(Fields.DESCRIPTION),
-                PictureIndexConverter.getPictureByIndex( Math.toIntExact((Long) doc.get(Fields.PICTURE))), // TODO хотим побаловаться с int
+                PictureIndexConverter.getPictureByIndex( Math.toIntExact((Long) doc.get(Fields.PICTURE))),
                 (boolean) doc.get(Fields.LIKE),
-                ((Timestamp) doc.get(Fields.DATE)).toDate()); // TODO узнать про картинки
+                ((Timestamp) doc.get(Fields.DATE)).toDate());
         answer.setId(id);
         return answer;
     }
