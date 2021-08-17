@@ -6,6 +6,38 @@ import android.os.Parcelable;
 import java.util.Date;
 
 public class CardData implements Parcelable {
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    private String id;       // заголовок
+    private String title;       // заголовок
+    private String description; // описание
+    private int picture;        // изображение
+    private boolean like;       // флажок
+    private Date date;
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setPicture(int picture) {
+        this.picture = picture;
+    }
+
+    public void setLike(boolean like) {
+        this.like = like;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
     protected CardData(Parcel in) {
         title = in.readString();
         description = in.readString();
@@ -42,11 +74,7 @@ public class CardData implements Parcelable {
         this.title = title;
     }
 
-    private String title;       // заголовок
-    private String description; // описание
-    private int picture;        // изображение
-    private boolean like;       // флажок
-    private Date date;
+
 
     public Date getDate() {
         return date;

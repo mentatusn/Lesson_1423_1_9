@@ -9,16 +9,18 @@ import java.util.List;
 
 import ru.geekbrains.socialnetwork.R;
 
-public class CardsSourceImpl implements CardsSource {
+public class CardsSourceLocalImpl implements CardsSource {
     private List<CardData> dataSource;
     private Resources resources;    // ресурсы приложения
 
-    public CardsSourceImpl(Resources resources) {
+    public CardsSourceLocalImpl(Resources resources) {
         dataSource = new ArrayList<>(7);
         this.resources = resources;
     }
 
-    public CardsSourceImpl init(){
+
+
+    public CardsSource init(CardsSourceResponse cardsSourceResponse) {
         // строки заголовков из ресурсов
         String[] titles = resources.getStringArray(R.array.titles);
         // строки описаний из ресурсов
@@ -29,6 +31,10 @@ public class CardsSourceImpl implements CardsSource {
         for (int i = 0; i < descriptions.length; i++) {
             dataSource.add(new CardData(titles[i], descriptions[i], pictures[i], false,
                     Calendar.getInstance().getTime()));
+        }
+
+        if(cardsSourceResponse!=null){
+            cardsSourceResponse.initialized(this);
         }
         return this;
     }
@@ -44,6 +50,7 @@ public class CardsSourceImpl implements CardsSource {
         }
         return answer;
     }
+
 
     public CardData getCardData(int position) {
         return dataSource.get(position);

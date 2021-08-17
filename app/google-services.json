@@ -33,6 +33,43 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:704278114684:android:689055415363e8cf2574f9",
+        "android_client_info": {
+          "package_name": "ru.geekbrains.socialnetwork2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "704278114684-0d37vgd4vhummdsi25mpkr6rgfjc6gbp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ru.geekbrains.socialnetwork2",
+            "certificate_hash": "269491538aed88c28e3cc6f1365b07eaead4135c"
+          }
+        },
+        {
+          "client_id": "704278114684-7m716vad23ifu34ja0jha6rljvf3a08f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChI-SwV4lXQY199sZOeVfhn1j3GGP7Rc4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "704278114684-7m716vad23ifu34ja0jha6rljvf3a08f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"

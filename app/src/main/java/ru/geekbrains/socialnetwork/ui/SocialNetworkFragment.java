@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -19,17 +18,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import java.util.Calendar;
 
 import ru.geekbrains.socialnetwork.MainActivity;
 import ru.geekbrains.socialnetwork.Navigation;
 import ru.geekbrains.socialnetwork.R;
 import ru.geekbrains.socialnetwork.data.CardData;
 import ru.geekbrains.socialnetwork.data.CardsSource;
-import ru.geekbrains.socialnetwork.data.CardsSourceImpl;
+import ru.geekbrains.socialnetwork.data.CardsSourceLocalImpl;
+import ru.geekbrains.socialnetwork.data.CardsSourceRemoteImpl;
+import ru.geekbrains.socialnetwork.data.CardsSourceResponse;
 import ru.geekbrains.socialnetwork.observe.Observer;
 import ru.geekbrains.socialnetwork.observe.Publisher;
 
@@ -63,12 +61,6 @@ public class SocialNetworkFragment extends Fragment {
 
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        data = new CardsSourceImpl(getResources()).init();
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);
@@ -77,6 +69,22 @@ public class SocialNetworkFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recycler_view_lines);
         // Получим источник данных для списка
         initRecyclerView(recyclerView, data);
+        if(false){
+            data = new CardsSourceLocalImpl(getResources()).init(new CardsSourceResponse() {
+                @Override
+                public void initialized(CardsSource cardsSource) {
+
+                }
+            });
+        }else{
+            data = new CardsSourceRemoteImpl().init(new CardsSourceResponse() {
+                @Override
+                public void initialized(CardsSource cardsSource) {
+                    adapter.notifyDataSetChanged();
+                }
+            });
+        }
+        adapter.setDataSource(data);
         return view;
     }
 
@@ -90,7 +98,7 @@ public class SocialNetworkFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
 
         // Установим адаптер
-        adapter = new SocialNetworkAdapter(data,this);
+        adapter = new SocialNetworkAdapter(this);
         recyclerView.setAdapter(adapter);
         DefaultItemAnimator defaultItemAnimator = new DefaultItemAnimator();
         defaultItemAnimator.setAddDuration(2000);

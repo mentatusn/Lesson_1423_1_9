@@ -20,6 +20,7 @@ import java.util.Date;
 import ru.geekbrains.socialnetwork.MainActivity;
 import ru.geekbrains.socialnetwork.R;
 import ru.geekbrains.socialnetwork.data.CardData;
+import ru.geekbrains.socialnetwork.data.PictureIndexConverter;
 import ru.geekbrains.socialnetwork.observe.Publisher;
 
 public class CardUpdateFragment extends Fragment {
@@ -116,16 +117,17 @@ public class CardUpdateFragment extends Fragment {
         String title = this.title.getText().toString();
         String description = this.description.getText().toString();
         Date date = getDateFromDatePicker();
-        int picture;
-        boolean like;
+        //int picture;
+        //boolean like;
         if (cardData != null) {
-            picture = cardData.getPicture();
-            like = cardData.isLike();
+            cardData.setTitle(title);
+            cardData.setDescription(description);
+            cardData.setDate(date);
+            return  cardData;
         } else {
-            picture = R.drawable.nature1;
-            like = false;
+            int picture =PictureIndexConverter.getPictureByIndex(PictureIndexConverter.randomPictureIndex());
+            return new CardData(title,description,picture,false,date);
         }
-        return new CardData(title, description, picture, like, date);
     }
 
 
